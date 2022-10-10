@@ -290,7 +290,7 @@ int counter = 50;
 // if seg7 flag = 0 we display led7seg 1 else we display led7seg 2
 int seg7_flag = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	timerRun(); // timer for toggle led red (PA4) every one second
+	timerRun(); // timer for toggle led red (PA5) every one second
 	if (counter > 0) {
 		counter--;
 		if (counter <= 0) { // timer time out we need toggle enable signal and display led7seg
