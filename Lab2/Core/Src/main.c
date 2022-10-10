@@ -259,7 +259,7 @@ int main(void) {
 			}
 			if (index_led > MAX_LED - 1)
 				index_led = 0;
-			//			update led 7seg
+			//	update led 7seg
 			update7SEG(index_led++);
 		}
 	}
