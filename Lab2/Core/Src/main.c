@@ -188,16 +188,15 @@ int main(void) {
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
-	setTimer1(100);
 	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
 	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
 	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
 	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
-	display7SEG(-1);
-
+//	set time to begin clock
 	int hour = 15, minute = 8, second = 50;
 	while(1){
 	    second++;
+//	    logic to calculate clock
 	    if (second >= 60){
 	        second = 0;
 	        minute++;
@@ -208,11 +207,12 @@ int main(void) {
 	    }
 	    if(hour >=24){
 	        hour = 0;
-	    }
+//	    generate number for 4 led7segs
 	    updateClockBuffer(hour,minute);
 	    HAL_Delay(1000);
 	}
 	/* USER CODE END 3 */
+	}
 }
 
 /**
@@ -336,7 +336,6 @@ int counter_7seg = 25; // counter for 4 led7seg
 int counter_ledred = 100; // counter for two led red (DOT)
 int seg7_flag = 0; // flag for 4 led7seg
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	timerRun(); // timer for toggle led red D1 every second
 //	timer for led 7 segment begin
 	if (counter_7seg > 0) {
 		counter_7seg--;
