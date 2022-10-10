@@ -56,6 +56,9 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+// timer0 and timerRun are created in timer.c and timer.h
+
 // display led 7seg function
 void display7SEG(int num) {
 	switch (num) {
@@ -196,9 +199,7 @@ int main(void) {
 	int hour = 15, minute = 8, second = 50;
 	updateClockBuffer(hour, minute);
 	setTimer0(1000);
-	setTimer1(250);
 
-	int seg7_flag = 0;
 	while (1) {
 //		execute toggle led red, dot and update clock buffer by using timer0
 		if (timer0_flag == 1) {
@@ -223,44 +224,6 @@ int main(void) {
 
 //			Toggle value DOT
 			HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-		}
-//		execute update 7Seg by using timer1
-		if (timer1_flag == 1) {
-			setTimer1(250);
-			//	timer for led 7 segment begin
-			if (seg7_flag == 0) {
-				//	set enable signal to turn on led7seg 1
-				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
-				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
-				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
-				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
-				seg7_flag = 1;
-			} else if (seg7_flag == 1) {
-				//	set enable signal to turn on led7seg 2
-				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
-				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
-				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
-				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
-				seg7_flag = 2;
-			} else if (seg7_flag == 2) {
-				//	set enable signal to turn on led7seg 3
-				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
-				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
-				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
-				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
-				seg7_flag = 3;
-			} else if (seg7_flag == 3) {
-				//	set enable signal to turn on led7seg 4
-				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
-				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
-				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
-				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
-				seg7_flag = 0;
-			}
-			if (index_led > MAX_LED - 1)
-				index_led = 0;
-			//	update led 7seg
-			update7SEG(index_led++);
 		}
 	}
 }
@@ -381,8 +344,49 @@ HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */
+int counter_7seg = 25; // counter for 4 led7seg
+int seg7_flag = 0; // flag for 4 led7seg
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-timerRun();
+	timerRun(); // TIMER0 AND FUNCTION TIMERRUN IS GREARATED IN timer.h and timer.c
+//	timer for led 7 segment begin
+	if (counter_7seg > 0) {
+		counter_7seg--;
+		if (counter_7seg <= 0) {
+			counter_7seg = 25;
+			if (seg7_flag ==  0) {
+//				set enable signal to turn on led7seg 1
+				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
+				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+				seg7_flag = 1;
+			} else if (seg7_flag == 1) {
+				//	set enable signal to turn on led7seg 2
+				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+				seg7_flag = 2;
+			} else if (seg7_flag == 2) {
+				//	set enable signal to turn on led7seg 3
+				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
+				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+				seg7_flag = 3;
+			} else if (seg7_flag == 3) {
+				//	set enable signal to turn on led7seg 4
+				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
+				seg7_flag = 0;
+			}
+			if(index_led > MAX_LED - 1) index_led = 0;
+//			update led 7seg
+			update7SEG(index_led++);
+		}
+	}
 }
 /* USER CODE END 4 */
 
