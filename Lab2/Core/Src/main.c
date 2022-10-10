@@ -317,7 +317,7 @@ static void MX_GPIO_Init(void) {
 }
 
 /* USER CODE BEGIN 4 */
-int counter_7seg = 50; // counter for 4 led7seg
+int counter_7seg = 25; // counter for 4 led7seg
 int counter_ledred = 100; // counter for two led red (DOT)
 int seg7_flag = 0; // flag for 4 led7seg
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
@@ -326,10 +326,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (counter_7seg > 0) {
 		counter_7seg--;
 		if (counter_7seg <= 0) {
-			counter_7seg = 50;
-			if(index_led > MAX_LED - 1) index_led = 0;
-//			update led 7seg
-			update7SEG(index_led++);
+			counter_7seg = 25;
 			if (seg7_flag ==  0) {
 //				set enable signal to turn on led7seg 1
 				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
@@ -359,6 +356,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
 				seg7_flag = 0;
 			}
+			if(index_led > MAX_LED - 1) index_led = 0;
+//			update led 7seg
+			update7SEG(index_led++);
 		}
 	}
 //	timer for two led red begin
