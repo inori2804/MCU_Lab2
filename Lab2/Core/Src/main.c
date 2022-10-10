@@ -56,6 +56,23 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+int timer0_counter = 0;
+int timer0_flag = 0;
+int TIMER_CYCLE = 10;
+void setTimer0(int duration){
+	timer0_counter = duration/TIMER_CYCLE;
+	timer0_flag = 0;
+}
+void timerRun(){
+	if(timer0_counter > 0){
+		timer0_counter--;
+		if(timer0_counter <= 0){
+			timer0_flag = 1;
+		}
+	}
+}
+
 // display led 7seg function
 void display7SEG(int num) {
 	switch (num) {
@@ -194,7 +211,13 @@ int main(void) {
 	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
 //	set time to begin clock
 	int hour = 15, minute = 8, second = 50;
+	setTimer0(1000);
 	while(1){
+		if(timer0_flag == 1){
+			setTimer0(2000);
+			HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		}
+
 	    second++;
 //	    logic to calculate clock
 	    if (second >= 60){
@@ -336,6 +359,7 @@ int counter_7seg = 25; // counter for 4 led7seg
 int counter_ledred = 100; // counter for two led red (DOT)
 int seg7_flag = 0; // flag for 4 led7seg
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	timerRun();
 //	timer for led 7 segment begin
 	if (counter_7seg > 0) {
 		counter_7seg--;
