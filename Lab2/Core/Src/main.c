@@ -154,8 +154,10 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	setTimer1(100);
+	// set initial value for EN0 and EN1
 	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
 	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+//	reset led 7 segment
 	display7SEG(-1);
 	while (1) {
 		if (timer1_flag == 1) {
@@ -283,14 +285,17 @@ static void MX_GPIO_Init(void) {
 }
 
 /* USER CODE BEGIN 4 */
+// set counter and flag
 int counter = 50;
+// if seg7 flag = 0 we display led7seg 1 else we display led7seg 2
 int seg7_flag = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	timerRun();
+	timerRun(); // timer for toggle led red (PA4) every one second
 	if (counter > 0) {
 		counter--;
-		if (counter <= 0) {
+		if (counter <= 0) { // timer time out we need toggle enable signal and display led7seg
 			counter = 50;
+//	I have initialized the value for the opposite enable signal above
 			HAL_GPIO_TogglePin(EN0_GPIO_Port, EN0_Pin);
 			HAL_GPIO_TogglePin(EN1_GPIO_Port, EN1_Pin);
 			if (seg7_flag == 0) {
