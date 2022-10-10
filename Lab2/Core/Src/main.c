@@ -56,6 +56,7 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// display led 7seg function
 void display7SEG(int num) {
 	switch (num) {
 //		using output data register to set value for port B
@@ -116,6 +117,33 @@ void display7SEG(int num) {
 		GPIOB->ODR |= 0x00FF;
 		break;
 	}
+}
+
+const int MAX_LED = 4; // number of max led
+int index_led = 0;
+int led_buffer[4] = {1, 2, 3, 4}; //led number buffer
+// update led 7 seg function
+void update7SEG(int index){
+    switch (index){
+        case 0:
+            //Display the first 7SEG with led_buffer[0]
+        	display7SEG(led_buffer[0]);
+            break;
+        case 1:
+            //Display the second 7SEG with led_buffer[1]
+        	display7SEG(led_buffer[1]);
+            break;
+        case 2:
+            //Display the third 7SEG with led_buffer[2]
+        	display7SEG(led_buffer[2]);
+            break;
+        case 3:
+            //Display the forth 7SEG with led_buffer[3]
+        	display7SEG(led_buffer[3]);
+            break;
+        default:
+            break;
+    }
 }
 /* USER CODE END 0 */
 
@@ -299,13 +327,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		counter_7seg--;
 		if (counter_7seg <= 0) {
 			counter_7seg = 50;
-			if (seg7_flag == 0) {
+			if(index_led > MAX_LED - 1) index_led = 0;
+//			update led 7seg
+			update7SEG(index_led++);
+			if (seg7_flag ==  0) {
 //				set enable signal to turn on led7seg 1
 				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
 				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
 				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
-				display7SEG(1);
 				seg7_flag = 1;
 			} else if (seg7_flag == 1) {
 				//	set enable signal to turn on led7seg 2
@@ -313,7 +343,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
 				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
-				display7SEG(2);
 				seg7_flag = 2;
 			} else if (seg7_flag == 2) {
 				//	set enable signal to turn on led7seg 3
@@ -321,7 +350,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
 				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
-				display7SEG(3);
 				seg7_flag = 3;
 			} else if (seg7_flag == 3) {
 				//	set enable signal to turn on led7seg 4
@@ -329,7 +357,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
 				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
-				display7SEG(0);
 				seg7_flag = 0;
 			}
 		}
