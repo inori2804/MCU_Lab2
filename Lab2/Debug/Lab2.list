@@ -524,11 +524,12 @@ int main(void) {
 	    if(hour >=24){
  800040a:	68fb      	ldr	r3, [r7, #12]
  800040c:	2b17      	cmp	r3, #23
- 800040e:	dde9      	ble.n	80003e4 <main+0x54>
+ 800040e:	dd01      	ble.n	8000414 <main+0x84>
 	        hour = 0;
  8000410:	2300      	movs	r3, #0
  8000412:	60fb      	str	r3, [r7, #12]
 //	    generate number for 4 led7segs
+	    }
 	    updateClockBuffer(hour,minute);
  8000414:	68b9      	ldr	r1, [r7, #8]
  8000416:	68f8      	ldr	r0, [r7, #12]

@@ -208,9 +208,9 @@ int main(void) {
 	    if(hour >=24){
 	        hour = 0;
 //	    generate number for 4 led7segs
+	    }
 	    updateClockBuffer(hour,minute);
 	    HAL_Delay(1000);
-	}
 	/* USER CODE END 3 */
 	}
 }
