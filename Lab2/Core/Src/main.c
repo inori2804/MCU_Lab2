@@ -58,7 +58,6 @@ static void MX_GPIO_Init(void);
 /* USER CODE BEGIN 0 */
 
 // TIMER0 AND FUNCTION TIMERRUN IS GREARATED IN timer.h and timer.c
-
 // display led 7seg function
 void display7SEG(int num) {
 	switch (num) {
@@ -124,36 +123,36 @@ void display7SEG(int num) {
 
 const int MAX_LED = 4; // number of max led
 int index_led = 0;
-int led_buffer[4] = {1, 2, 3, 4}; //led number buffer
+int led_buffer[4] = { 1, 2, 3, 4 }; //led number buffer
 // update led 7 seg function
-void update7SEG(int index){
-    switch (index){
-        case 0:
-            //Display the first 7SEG with led_buffer[0]
-        	display7SEG(led_buffer[0]);
-            break;
-        case 1:
-            //Display the second 7SEG with led_buffer[1]
-        	display7SEG(led_buffer[1]);
-            break;
-        case 2:
-            //Display the third 7SEG with led_buffer[2]
-        	display7SEG(led_buffer[2]);
-            break;
-        case 3:
-            //Display the forth 7SEG with led_buffer[3]
-        	display7SEG(led_buffer[3]);
-            break;
-        default:
-            break;
-    }
+void update7SEG(int index) {
+	switch (index) {
+	case 0:
+		//Display the first 7SEG with led_buffer[0]
+		display7SEG(led_buffer[0]);
+		break;
+	case 1:
+		//Display the second 7SEG with led_buffer[1]
+		display7SEG(led_buffer[1]);
+		break;
+	case 2:
+		//Display the third 7SEG with led_buffer[2]
+		display7SEG(led_buffer[2]);
+		break;
+	case 3:
+		//Display the forth 7SEG with led_buffer[3]
+		display7SEG(led_buffer[3]);
+		break;
+	default:
+		break;
+	}
 }
 
-void updateClockBuffer(int hour, int minute){
-	led_buffer[0] = hour/10;
-	led_buffer[1] = hour%10;
-	led_buffer[2] = minute/10;
-	led_buffer[3] = minute%10;
+void updateClockBuffer(int hour, int minute) {
+	led_buffer[0] = hour / 10;
+	led_buffer[1] = hour % 10;
+	led_buffer[2] = minute / 10;
+	led_buffer[3] = minute % 10;
 }
 /* USER CODE END 0 */
 
@@ -197,31 +196,34 @@ int main(void) {
 	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
 //	set time to begin clock
 	int hour = 15, minute = 8, second = 50;
-    updateClockBuffer(hour,minute);
+	updateClockBuffer(hour, minute);
 	setTimer0(1000);
-	while(1){
-		if(timer0_flag == 1){
+	while (1) {
+		if (timer0_flag == 1) {
 			setTimer0(2000);
 			HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		}
 
-	    second++;
+		second++;
 //	    logic to calculate clock
-	    if (second >= 60){
-	        second = 0;
-	        minute++;
-	    }
-	    if(minute >= 60){
-	        minute = 0;
-	        hour++;
-	    }
-	    if(hour >=24){
-	        hour = 0;
-	    }
-	    //generate number for 4 led7segs
-	    updateClockBuffer(hour,minute);
-	    HAL_Delay(1000);
-	/* USER CODE END 3 */
+		if (second >= 60) {
+			second = 0;
+			minute++;
+		}
+		if (minute >= 60) {
+			minute = 0;
+			hour++;
+		}
+		if (hour >= 24) {
+			hour = 0;
+		}
+		//generate number for 4 led7segs
+		updateClockBuffer(hour, minute);
+		HAL_Delay(1000);
+		/* USER CODE END WHILE */
+
+		/* USER CODE BEGIN 3 */
+		/* USER CODE END 3 */
 	}
 }
 
@@ -313,13 +315,13 @@ static void MX_GPIO_Init(void) {
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOA,
-			DOT_Pin | LED_RED_Pin | EN0_Pin | EN1_Pin | EN2_Pin | EN3_Pin,
+	DOT_Pin | LED_RED_Pin | EN0_Pin | EN1_Pin | EN2_Pin | EN3_Pin,
 			GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOB,
-			SEG0_Pin | SEG1_Pin | SEG2_Pin | SEG3_Pin | SEG4_Pin | SEG5_Pin
-					| SEG6_Pin, GPIO_PIN_RESET);
+	SEG0_Pin | SEG1_Pin | SEG2_Pin | SEG3_Pin | SEG4_Pin | SEG5_Pin | SEG6_Pin,
+			GPIO_PIN_RESET);
 
 	/*Configure GPIO pins : DOT_Pin LED_RED_Pin EN0_Pin EN1_Pin
 	 EN2_Pin EN3_Pin */
@@ -352,7 +354,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		counter_7seg--;
 		if (counter_7seg <= 0) {
 			counter_7seg = 25;
-			if (seg7_flag ==  0) {
+			if (seg7_flag == 0) {
 //				set enable signal to turn on led7seg 1
 				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
 				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
@@ -381,7 +383,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
 				seg7_flag = 0;
 			}
-			if(index_led > MAX_LED - 1) index_led = 0;
+			if (index_led > MAX_LED - 1)
+				index_led = 0;
 //			update led 7seg
 			update7SEG(index_led++);
 		}
