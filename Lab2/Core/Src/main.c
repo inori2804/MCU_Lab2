@@ -225,6 +225,9 @@ int main(void) {
 			HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 		}
 	}
+	/* USER CODE END WHILE */
+
+	/* USER CODE BEGIN 3 */
 }
 /* USER CODE END 3 */
 
