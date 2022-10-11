@@ -263,6 +263,9 @@ int main(void) {
 			update7SEG(index_led++);
 		}
 	}
+	/* USER CODE END WHILE */
+
+	/* USER CODE BEGIN 3 */
 }
 /* USER CODE END 3 */
 
@@ -384,6 +387,7 @@ static void MX_GPIO_Init(void) {
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+//	timer using for this exercise is created in timer.c and timer.h
 	timerRun();
 }
 /* USER CODE END 4 */
