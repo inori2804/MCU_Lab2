@@ -29,7 +29,7 @@ void setTimer1(int duration){
 
 void setTimerMatrixLed(int duration){
 	matrixLed_counter = duration / TIMER_CYCLE;
-	matrixLed_flag = 1;
+	matrixLed_flag = 0;
 }
 
 

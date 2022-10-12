@@ -174,7 +174,8 @@ void clearMatrixLed(){
 
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
-uint8_t matrix_buffer[8] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+uint8_t matrix_buffer[8] = { 0xF8, 0xFC, 0x36, 0x33, 0x33, 0x36, 0xFC, 0xF8 };
+
 void updateLEDMatrix(int index) {
 	switch (index) {
 	case 0:
@@ -221,6 +222,7 @@ void updateLEDMatrix(int index) {
 		break;
 	}
 }
+
 /* USER CODE END 0 */
 
 /**
@@ -267,10 +269,10 @@ int main(void) {
 // set timer time
 	setTimer0(1000);
 	setTimer1(250);
+	setTimerMatrixLed(10);
 
+	int counter_shiftleft = 0;
 	int seg7_flag = 0;
-// test for buffer 2 is 0x03
-	updateLEDMatrix(2);
 
 	while (1) {
 //		execute toggle led red, dot and update clock buffer by using timer0
@@ -334,6 +336,22 @@ int main(void) {
 				index_led = 0;
 			//	update led 7seg
 			update7SEG(index_led++);
+		}
+		if(matrixLed_flag == 1){
+			setTimerMatrixLed(10);
+			counter_shiftleft++;
+			if(index_led_matrix > MAX_LED_MATRIX - 1){
+				index_led_matrix = 0;
+			}
+			updateLEDMatrix(index_led_matrix++);
+		}
+		if(counter_shiftleft == 7){
+			counter_shiftleft = 0;
+			uint8_t temp = matrix_buffer[0];
+			for(int i = 0; i < MAX_LED_MATRIX - 1; i++){
+				matrix_buffer[i] = matrix_buffer[i+1];
+			}
+			matrix_buffer[MAX_LED_MATRIX - 1] = temp;
 		}
 		/* USER CODE END WHILE */
 
