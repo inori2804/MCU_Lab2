@@ -1,3 +1,4 @@
-timer.c:17:6:setTimer0	16	static
-timer.c:22:6:setTimer1	16	static
-timer.c:28:6:timerRun	4	static
+timer.c:20:6:setTimer0	16	static
+timer.c:25:6:setTimer1	16	static
+timer.c:30:6:setTimerMatrixLed	16	static
+timer.c:37:6:timerRun	4	static

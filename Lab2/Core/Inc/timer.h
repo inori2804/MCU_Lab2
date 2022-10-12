@@ -10,7 +10,9 @@
 
 extern int timer1_flag;
 extern int timer0_flag;
+extern int matrixLed_flag;
 
+void setTimerMatrixLed(int duration);
 void setTimer0(int duration);
 void setTimer1(int duration);
 void timerRun();
