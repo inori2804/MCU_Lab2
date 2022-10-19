@@ -174,6 +174,7 @@ void clearMatrixLed(){
 
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
+//value buffer to display text A
 uint8_t matrix_buffer[8] = { 0xF8, 0xFC, 0x36, 0x33, 0x33, 0x36, 0xFC, 0xF8 };
 
 void updateLEDMatrix(int index) {
