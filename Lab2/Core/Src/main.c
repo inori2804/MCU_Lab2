@@ -272,7 +272,7 @@ int main(void) {
 	setTimer1(250);
 	setTimerMatrixLed(10);
 
-	int counter_shiftleft = 0;
+	int counter_shiftleft = 0; //counter to know when display all column in matrix led is complete
 	int seg7_flag = 0;
 
 	while (1) {
@@ -346,9 +346,11 @@ int main(void) {
 			}
 			updateLEDMatrix(index_led_matrix++);
 		}
+//		display all column in matrix left complete, shift left buffer
 		if(counter_shiftleft == 7){
 			counter_shiftleft = 0;
 			uint8_t temp = matrix_buffer[0];
+			//shift left buffer using for loop
 			for(int i = 0; i < MAX_LED_MATRIX - 1; i++){
 				matrix_buffer[i] = matrix_buffer[i+1];
 			}
