@@ -270,11 +270,10 @@ int main(void) {
 // set timer time
 	setTimer0(1000);
 	setTimer1(250);
-	setTimerMatrixLed(10);
+	setTimerMatrixLed(10); //timer for matrix led
 
-	int counter_shiftleft = 0;
 	int seg7_flag = 0;
-
+// Note that all timer I use are in timer.c and timer.h
 	while (1) {
 //		execute toggle led red, dot and update clock buffer by using timer0
 		if (timer0_flag == 1) {
@@ -340,19 +339,10 @@ int main(void) {
 		}
 		if(matrixLed_flag == 1){
 			setTimerMatrixLed(10);
-			counter_shiftleft++;
 			if(index_led_matrix > MAX_LED_MATRIX - 1){
 				index_led_matrix = 0;
 			}
 			updateLEDMatrix(index_led_matrix++);
-		}
-		if(counter_shiftleft == 7){
-			counter_shiftleft = 0;
-			uint8_t temp = matrix_buffer[0];
-			for(int i = 0; i < MAX_LED_MATRIX - 1; i++){
-				matrix_buffer[i] = matrix_buffer[i+1];
-			}
-			matrix_buffer[MAX_LED_MATRIX - 1] = temp;
 		}
 		/* USER CODE END WHILE */
 
