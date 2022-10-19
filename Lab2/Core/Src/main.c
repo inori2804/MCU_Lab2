@@ -154,9 +154,10 @@ void updateClockBuffer(int hour, int minute) {
 }
 // calculate binary value to display in matrix led
 void displayMatrixLed(uint8_t matrix_buffer){
-	matrix_buffer = ~matrix_buffer;
-	uint16_t buffer = matrix_buffer << 8;
-	buffer += 0xFF;
+	matrix_buffer = ~matrix_buffer; //1 led off 0 led on so we need toggle value
+	uint16_t buffer = matrix_buffer << 8; //shift left 8bit because 8bit low in port B we dont use
+	buffer += 0xFF; //set 8bit low of buffer to 1111_1111
+	//using output data register to set value to port B
 	GPIOB->ODR |= 0xFF00;
 	GPIOB->ODR &= buffer;
 }
