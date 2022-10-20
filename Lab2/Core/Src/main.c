@@ -198,12 +198,17 @@ int main(void) {
 	int hour = 15, minute = 8, second = 50;
 	updateClockBuffer(hour, minute);
 	setTimer0(1000);
-
+	int counter_ledRed = 0;
 	while (1) {
 //		execute toggle led red, dot and update clock buffer by using timer0
 		if (timer0_flag == 1) {
 			setTimer0(1000);
-			HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+
+			counter_ledRed++;
+			if(counter_ledRed == 2){
+				HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+				counter_ledRed = 0;
+			}
 
 //			logic to calculate clock
 			second++;
